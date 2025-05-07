@@ -1,0 +1,47 @@
+1) Select * from cd.facilities;
+
+2) select f.name, f.membercost from cd.facilities f; 
+
+3) select * from cd.facilities f where f.membercost != 0;
+
+4)  select f.facid, f.name, f.membercost, f.monthlymaintenance
+    from cd.facilities f
+    where f.membercost<f.monthlymaintenance/50 and f.membercost>0;
+
+5) select * from cd.facilities f
+   where f.name like '%Tennis%';
+
+6) select * from cd.facilities f
+   where f.facid in (1,5);
+
+7) select f.name,
+    case when (f.monthlymaintenance>100) then 
+        'expensive'
+    else
+        'cheap'
+    end as cost
+    from cd.facilities f;
+
+8)  select memid, surname, firstname, joindate
+    from cd.members
+    where joindate>DATE('2012-09-01'); 	
+
+9)  select distinct(surname)
+    from cd.members
+    order by surname
+    limit 10;
+
+10) select name	from cd.facilities
+    union 
+    select surname from cd.members;    
+
+11)  select MAX(joindate)as latest
+    from cd.members;
+
+12) select firstname, surname, joindate
+    from cd.members 
+    where joindate = (
+        select MAX(joindate)as latest
+        from cd.members
+    );
+

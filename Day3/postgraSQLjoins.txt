@@ -1,0 +1,51 @@
+1) select starttime from cd.bookings b
+    join cd.members m on b.memid = m.memid
+    where m.firstname = 'David' 
+        and m.surname = 'Farrell';
+
+2)  select starttime as start, name 
+    from cd.facilities f
+    inner join cd.bookings b on f.facid = b.facid
+    where name in ('Tennis Court 2','Tennis Court 1') and 
+        DATE(starttime) = '2012-09-21'
+    order by starttime;
+
+3)  select firstname, surname 
+    from cd.members 
+    where memid in (
+        select recommendedby
+        from cd.members
+        where recommendedby is not null
+    ) order by surname, firstname;
+
+4)  select m.firstname as memsfname, m.surname memsname, 
+        r.firstname recfname, r.surname recsname
+    from cd.members m
+    left outer join cd.members r 
+        on m.recommendedby=r.memid
+    order by m.surname, m.firstname;
+
+5)  select distinct concat(m.firstname, ' ', m.surname) as member, f.name
+    from cd.members m
+        join cd.bookings b on m.memid = b.memid
+        join cd.facilities f on b.facid = f.facid
+    where f.name like '%Tennis Court%'
+    order by member, f.name;
+
+6)  select 
+    concat(m.firstname, ' ', m.surname) as member, 
+    f.name as facility,  
+    case
+        when m.memid = 0 then f.guestcost * b.slots 
+        else f.membercost * b.slots 
+    end as cost
+    from cd.members m
+    join cd.bookings b on m.memid = b.memid
+    join cd.facilities f on b.facid = f.facid
+    where DATE(b.starttime) = DATE('2012-09-14')
+    and (
+        case
+        when m.memid = 0 then f.guestcost * b.slots 
+        else f.membercost * b.slots 
+        end
+    ) > 30;
