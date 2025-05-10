@@ -261,7 +261,32 @@ SELECT * FROM inventory_log;
 
 
 -- Write a trigger that ensures a rental can’t be made for a customer who owes more than $50.
+CREATE OR REPLACE FUNCTION check_customer_balance()
+RETURNS TRIGGER AS $$
+DECLARE
+    unpaid_balance NUMERIC := 0;
+BEGIN
+    -- Calculate the total rental cost for rentals that have no payment
+    SELECT COALESCE(SUM(f.rental_rate), 0) INTO unpaid_balance
+    FROM rental r
+    JOIN inventory i ON r.inventory_id = i.inventory_id
+    JOIN film f ON i.film_id = f.film_id
+    LEFT JOIN payment p ON r.rental_id = p.rental_id
+    WHERE r.customer_id = NEW.customer_id
+      AND p.payment_id IS NULL;
 
+    IF unpaid_balance >= 50 THEN
+        RAISE EXCEPTION 'Customer % has unpaid rentals of $%. Cannot rent more.', NEW.customer_id, unpaid_balance;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER block_high_balance_rental
+BEFORE INSERT ON rental
+FOR EACH ROW
+EXECUTE FUNCTION check_customer_balance();
  
 -- Transaction-Based Questions (5)
 

@@ -132,23 +132,22 @@ select film_id, title, rental_rate as "new rate" from film where film_id = 1;
 
 
 
--- Write a procedure to list overdue rentals (return date is NULL and rental date older than 7 days).
--- Procedure: get_overdue_rentals() that selects relevant columns.
-
-
--- This is not working for me because select does not work in procedure in postgre
--- create or replace procedure get_overdue_rentals() 
--- as
--- $$
--- begin
--- 	RETURN QUERY 
--- 	SELECT rental_id, customer_id, rental_date 
---     FROM rental
---     WHERE return_date IS NULL 
---     AND rental_date < CURRENT_DATE - INTERVAL '7 days';
--- end;
--- $$
--- language plpgsql
+CREATE OR REPLACE PROCEDURE get_overdue_rentals()
+AS $$
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN 
+        SELECT rental_id, customer_id, rental_date 
+        FROM rental
+        WHERE return_date IS NULL 
+          AND rental_date < CURRENT_DATE - INTERVAL '7 days'
+    LOOP
+        RAISE NOTICE 'Overdue Rental: %, %, %', r.rental_id, r.customer_id, r.rental_date;
+    END LOOP;
+END;
+$$ 
+LANGUAGE plpgsql;
 
 
 call get_overdue_rentals()
