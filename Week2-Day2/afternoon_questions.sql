@@ -153,44 +153,82 @@ begin
 	close cur;
 end;
 $$;
+
+--loop through all the films and update the rental rate by +1 for teh films when rental count < 5
+
+create or replace procedure proc_update_rental_rate()
+language plpgsql
+as $$
+declare
+  rec record;
+  cur_film_rent_count cursor for
+  select f.film_id, f.rental_rate, count(r.rental_id) as rental_count 
+  from film f left join inventory i on f.film_id = i.film_id
+  left join rental r on i.inventory_id = r.inventory_id
+  group by f.film_id, f.rental_rate;
+Begin
+  open cur_film_rent_count;
+
+  Loop
+  	Fetch cur_film_rent_count into rec;
+	exit when not found;
+
+	if rec.rental_count < 5 then
+	   update film set rental_rate= rental_rate +1
+	   where film_id =  rec.film_id;
+
+	   raise notice 'updated file  with id % . The new rental rate is %',rec.film_id,rec.rental_rate+1;
+	end if;
+end loop;
+close cur_film_rent_count;
+end;
+$$;
+
+call proc_update_rental_rate();
+
 -- --------------------------------------------------------------------------
  
 -- Transactions 
 
 -- Write a transaction that inserts a new customer, adds their rental, and logs the payment – all atomically.
 
-BEGIN;
-	insert into customer
-	values(
-		600,
-		2, 
-		'Jin',
-		'Sakai',
-		'jinsakai@tushima.com',
-		594, 
-		true,
-		CURRENT_DATE
-	);
+CREATE OR REPLACE PROCEDURE proc_create_customer_rental_payment(
+	p_first_name TEXT,
+	p_last_name TEXT, 
+	p_email TEXT,
+	p_address_id INT, 
+	p_inventory_id int, 
+	p_store_is int, 
+	p_staff_id int,
+	p_amount numeric
+)
+AS $$
+DECLARE
+    v_customer_id INT;
+    v_rental_id INT;
+BEGIN
+	IF (p_amount <= 0) THEN
+		RAISE EXCEPTION 'Amount cannot be Zero';
+	END IF;
+  	BEGIN
+	    INSERT INTO customer (store_id, first_name, last_name, email, address_id, active, create_date)
+	    VALUES (p_store_is,p_first_name,p_last_name,p_email,p_address_id, 1, CURRENT_DATE)
+	    RETURNING customer_id INTO v_customer_id;
+	 
+	    INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id)
+	    VALUES (CURRENT_TIMESTAMP, p_inventory_id, v_customer_id, p_staff_id)
+	    RETURNING rental_id INTO v_rental_id;
+	    
+	    INSERT INTO payment (customer_id, staff_id, rental_id, amount, payment_date)
+	    VALUES (v_customer_id, p_staff_id, v_rental_id, p_amount, CURRENT_TIMESTAMP);
+	EXCEPTION WHEN OTHERS THEN
+		RAISE NOTICE 'Transaction failed %', SQLERRM;
+	END;
+END; 
+$$
+LANGUAGE plpgsql;
 
-	insert into rental
-	values(
-		1004, 
-		CURRENT_DATE, 
-		709, 
-		600,
-		CURRENT_DATE, 
-		2
-	);
-	insert into payment
-	values(
-		18503,
-		2,
-		2,
-		1003, 
-		3.99,
-		CURRENT_DATE
-	);
-COMMIT;
+call proc_create_customer_rental_payment ('Keith','Hedger','kh@gmail.com',3,1,1,1,12);
 
 select * from customer where customer_id = 600;
 select * from rental where rental_id = 1004;
@@ -261,7 +299,7 @@ CREATE OR REPLACE FUNCTION checkzero()
 RETURNS TRIGGER
 AS $$
 BEGIN 
-	if (NEW.amout>=0) then
+	if (NEW.amount>=0) then
 		RAISE NOTICE 'Payment cannot be zero or less than zero';
 	end if;
 	RETURN NEW;
@@ -336,7 +374,6 @@ BEGIN
     AND DATE_TRUNC('week', r.rental_date) = DATE_TRUNC('week', NEW.rental_date)
     GROUP BY f.film_id, f.title;
 
-    RAISE NOTICE 'Film: %, Rentals this week: %, Week: %', title, rental_count, rental_week;
 
     IF rental_count > 3 THEN
         INSERT INTO rental_log (film_id, title, rental_count, rental_week)
@@ -359,3 +396,4 @@ insert into rental values(160675, CURRENT_DATE, 1712, 331, CURRENT_DATE, 2);
 insert into rental values(160537, CURRENT_DATE, 176, 216, CURRENT_DATE, 2);
 insert into rental values(160520, CURRENT_DATE, 2919, 150, CURRENT_DATE, 1);
 
+select * from rental_log;
