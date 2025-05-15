@@ -13,7 +13,7 @@ initdb -D "D:/pri"
 
 pg_ctl -D D:\pri -o "-p 5433" -l d:\pri\logfile start
 
->psql -p 5433 -d postgres -c "CREATE ROLE replicator with REPLICATION LOGIN PASSWORD 'repl_pass';
+psql -p 5433 -d postgres -c "CREATE ROLE replicator with REPLICATION LOGIN PASSWORD 'repl_pass';
 
 pg_basebackup -D d:\sec -Fp -Xs -P -R -h 127.0.0.1 -U replicator -p 5433
 
