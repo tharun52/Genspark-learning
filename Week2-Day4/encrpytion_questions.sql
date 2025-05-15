@@ -12,6 +12,23 @@ $$ LANGUAGE plpgsql;
 
 SELECT encode(func_encrypt_text('9876543210', 'mySecretKey123'), 'base64');
 
+--Stored Procedure
+CREATE OR REPLACE PROCEDURE proc_encrypt_text(IN input_text TEXT, IN secret_key TEXT, OUT encrypted_output BYTEA)
+AS $$
+BEGIN
+    encrypted_output := pgp_sym_encrypt(input_text, secret_key);
+END;
+$$ LANGUAGE plpgsql;
+
+DO $$
+DECLARE
+    encrypted_output BYTEA;
+BEGIN
+    CALL proc_encrypt_text('9876543210', 'mySecretKey123', encrypted_output);
+    RAISE NOTICE 'Encrypted result: %', encode(encrypted_output, 'base64');
+END;
+$$;
+
 -- 2. Create a stored procedure to compare two encrypted texts
 -- Task: Write a procedure sp_compare_encrypted that takes two encrypted values and checks if they decrypt to the same plain text.
 
@@ -23,6 +40,30 @@ END;
 $$ LANGUAGE plpgsql;
 
 SELECT func_compare_encrypted(func_encrypt_text('9876543210', 'mySecretKey123'), func_encrypt_text('9876543210', 'mySecretKey123'), 'mySecretKey123');
+
+
+--Stored Procedure
+CREATE OR REPLACE PROCEDURE proc_compare_encrypted(IN pass1 BYTEA, IN pass2 BYTEA, IN secret_key TEXT, OUT is_equal BOOLEAN)
+AS $$
+BEGIN
+    is_equal := (pgp_sym_decrypt(pass1, secret_key) = pgp_sym_decrypt(pass2, secret_key));
+END;
+$$ LANGUAGE plpgsql;
+
+DO $$
+DECLARE
+    encrypted1 BYTEA;
+    encrypted2 BYTEA;
+    result BOOLEAN;
+BEGIN
+    encrypted1 := pgp_sym_encrypt('9876543210', 'mySecretKey123');
+    encrypted2 := pgp_sym_encrypt('9876543210', 'mySecretKey123');
+
+    CALL proc_compare_encrypted(encrypted1, encrypted2, 'mySecretKey123', result);
+
+    RAISE NOTICE 'Are the values equal? %', result;
+END;
+$$;
 
 -- 3. Create a stored procedure to partially mask a given text
 -- Task: Write a procedure sp_mask_text that:
@@ -47,6 +88,32 @@ END;
 $$ LANGUAGE plpgsql;
 
 select func_mask_text('john.doe@example.com');
+
+
+--Stored Procedure
+CREATE OR REPLACE PROCEDURE proc_mask_text(IN pass TEXT, OUT masked_text TEXT)
+AS $$
+DECLARE
+    len INT;
+BEGIN
+    len := LENGTH(pass);
+    IF len <= 4 THEN
+        masked_text := pass;
+    ELSE
+        masked_text := CONCAT(SUBSTRING(pass, 1, 2), REPEAT('*', len - 4), SUBSTRING(pass, len - 1, 2));
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+DO $$
+DECLARE
+    result TEXT;
+BEGIN
+    CALL proc_mask_text('john.doe@example.com', result);
+    RAISE NOTICE 'Masked Text: %', result;
+END;
+$$;
+
  
 -- 4. Create a procedure to insert into customer with encrypted email and masked name
 -- Task:
@@ -82,7 +149,6 @@ CREATE TABLE customer (
     FOREIGN KEY (store_id) REFERENCES store(store_id)
 );
 
-DROP TABLE customer;
 
 INSERT INTO address (address_line, city, postal_code, country) VALUES
 ('123 Main St', 'Chennai', '600001', 'India'),
@@ -104,6 +170,8 @@ $$ LANGUAGE plpgsql;
 
 CALL insert_customer('Grenchen', 'Miller', 'grenchen@example.com', 1, 1);
 CALL insert_customer('Arthur', 'Morgan', 'arthur@rdr.com', 1, 1);
+
+CALL insert_customer('Anakin', 'Skywalker', 'darth@gmail.com', 1, 2);
 
 SELECT * FROM customer;
 
