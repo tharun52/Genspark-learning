@@ -47,6 +47,7 @@ class User
     }
 }
 
+// This is the proxy file
 class ProxyFile : IFile
 {
     private File realFile;
