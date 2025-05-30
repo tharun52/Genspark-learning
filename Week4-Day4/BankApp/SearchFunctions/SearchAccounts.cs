@@ -24,5 +24,39 @@ namespace BankApp.SearchFunctions
                 throw new Exception("An error occurred while retrieving accounts.", ex);
             }
         }
+
+        public Task<SearchAccountDto?> GetAccountById(int accountId)
+        {
+            try
+            {
+                return _bankContext.GetAccountById(accountId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while retrieving the account with ID {accountId}.", ex);
+            }
+        }
+        public Task<ICollection<SearchAccountDto>> GetAccountByName(string accountHolderName)
+        {
+            try
+            {
+                return _bankContext.GetAccountByName(accountHolderName);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while retrieving accounts with the name {accountHolderName}.", ex);
+            }
+        }
+        public Task<ICollection<SearchAccountDto>> GetAccountByEmail(string email)
+        {
+            try
+            {
+                return _bankContext.GetAccountByEmail(email);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while retrieving accounts with the email {email}.", ex);
+            }
+        }
     }
 }

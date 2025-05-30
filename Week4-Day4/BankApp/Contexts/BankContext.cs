@@ -21,13 +21,39 @@ namespace BankApp.Contexts
 
         public async Task<ICollection<SearchAccountDto>> GetAllAccounts()
         {
-            return await this.Set<SearchAccountDto>()
+            return await Set<SearchAccountDto>()
                         .FromSqlInterpolated($@"SELECT ""AccountId"", ""AccountHolderName"",""Email"", ""Balance"", ""CreatedAt""
                                                 FROM public.""Accounts"" 
                                                 ORDER BY ""AccountId"" ASC")
                         .ToListAsync();
         }
 
+        public async Task<SearchAccountDto?> GetAccountById(int accountId)
+        {
+            return await Set<SearchAccountDto>()
+                        .FromSqlInterpolated($@"SELECT ""AccountId"", ""AccountHolderName"", ""Email"", ""Balance"", ""CreatedAt""
+                                                FROM public.""Accounts"" 
+                                                WHERE ""AccountId"" = {accountId}")
+                        .FirstOrDefaultAsync();
+        }
+
+        public async Task<ICollection<SearchAccountDto>> GetAccountByName(string accountHolderName)
+        {
+            return await Set<SearchAccountDto>()
+                        .FromSqlInterpolated($@"SELECT ""AccountId"", ""AccountHolderName"", ""Email"", ""Balance"", ""CreatedAt""
+                                                FROM public.""Accounts"" 
+                                                WHERE ""AccountHolderName"" ILIKE {accountHolderName}")
+                        .ToListAsync();
+        }
+        public async Task<ICollection<SearchAccountDto>> GetAccountByEmail(string email)
+        {
+            return await Set<SearchAccountDto>()
+                        .FromSqlInterpolated($@"SELECT ""AccountId"", ""AccountHolderName"", ""Email"", ""Balance"", ""CreatedAt""
+                                                FROM public.""Accounts"" 
+                                                WHERE ""Email"" ILIKE {email}")
+                        .ToListAsync();
+        }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

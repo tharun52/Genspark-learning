@@ -40,11 +40,44 @@ namespace BankApp.Services
             }
         }
 
-        public Task<Account> GetAccountById(int accountId)
+        public Task<SearchAccountDto?> GetAccountById(int accountId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var searchResult = _searchAccounts.GetAccountById(accountId);
+                if (searchResult == null)
+                {
+                    throw new Exception($"Account with ID {accountId} not found.");
+                }
+                return searchResult;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while retrieving the account with ID {accountId}.", ex);
+            }
         }
-
+        public Task<ICollection<SearchAccountDto>> GetAccountByName(string accountHolderName)
+        {
+            try
+            {
+                return _searchAccounts.GetAccountByName(accountHolderName);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while retrieving accounts with the name {accountHolderName}.", ex);
+            }
+        }
+        public Task<ICollection<SearchAccountDto>> GetAccountByEmail(string email)
+        {
+            try
+            {
+                return _searchAccounts.GetAccountByEmail(email);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while retrieving accounts with the email {email}.", ex);
+            }
+        }
         public Task<ICollection<SearchAccountDto>> GetAllAccounts()
         {
             try
