@@ -33,13 +33,17 @@ namespace BankApp.Services
             try
             {
                 var fromAccount = await _bankContext.Accounts.FindAsync(createTransactionRequestDto.FromAccountId);
+                if (fromAccount == null)
+                {
+                    throw new Exception("Invalid from account.");
+                }
                 System.Console.WriteLine($"From Account Balance: {fromAccount.Balance}");
                 var toAccount = await _bankContext.Accounts.FindAsync(createTransactionRequestDto.ToAccountId);
-                System.Console.WriteLine($"To Account Balance: {toAccount.Balance}");
-                if (fromAccount == null || toAccount == null)
+                if (toAccount == null)
                 {
-                    throw new Exception("Invalid account.");
+                    throw new Exception("Invalid to account.");
                 }
+                System.Console.WriteLine($"To Account Balance: {toAccount.Balance}");
 
                 if (fromAccount.Balance < amount)
                 {
@@ -62,15 +66,38 @@ namespace BankApp.Services
                 throw;
             }
         }
-
-        public Task<ICollection<Transaction>> GetAllTransactions()
+        public Task<ICollection<SearchTransactionDto>> SearchSentTransactionsByAccountId(int accountId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _bankContext.GetSentTransactionsByAccountId(accountId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while retrieving sent transactions for account ID {accountId}.", ex);
+            }
         }
-
-        public Task<Transaction> GetTransactionById(int transactionId)
+        public Task<ICollection<SearchTransactionDto>> SearchReceivedTransactionsByAccountId(int accountId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _bankContext.GetRecievedTransactionsByAccountId(accountId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while retrieving received transactions for account ID {accountId}.", ex);
+            }
+        }
+        public Task<ICollection<SearchTransactionDto>> SearchTransactionsByDateRange(DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                return _bankContext.GetTransactionsByDateRange(startDate, endDate);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while retrieving transactions between {startDate} and {endDate}.", ex);
+            }
         }
     }
 }

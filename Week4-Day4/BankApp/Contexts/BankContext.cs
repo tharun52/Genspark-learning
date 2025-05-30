@@ -18,6 +18,8 @@ namespace BankApp.Contexts
         public DbSet<Models.Transaction> Transactions { get; set; }
 
         public DbSet<SearchAccountDto> SearchAccountDtos { get; set; }
+        public DbSet<SearchTransactionDto> SearchTransactionDtos { get; set; }
+        
 
         public async Task<ICollection<SearchAccountDto>> GetAllAccounts()
         {
@@ -53,7 +55,30 @@ namespace BankApp.Contexts
                                                 WHERE ""Email"" ILIKE {email}")
                         .ToListAsync();
         }
-        
+        public async Task<ICollection<SearchTransactionDto>> GetSentTransactionsByAccountId(int accountId)
+        {
+            return await Set<SearchTransactionDto>()
+                        .FromSqlInterpolated($@"SELECT ""TransactionId"", ""FromAccountId"", ""ToAccountId"", ""Amount"", ""TransactionDate""
+                                                FROM public.""Transactions"" 
+                                                WHERE ""FromAccountId"" = {accountId}")
+                        .ToListAsync();
+        }
+        public async Task<ICollection<SearchTransactionDto>> GetRecievedTransactionsByAccountId(int accountId)
+        {
+            return await Set<SearchTransactionDto>()
+                        .FromSqlInterpolated($@"SELECT ""TransactionId"", ""FromAccountId"", ""ToAccountId"", ""Amount"", ""TransactionDate""
+                                                FROM public.""Transactions"" 
+                                                WHERE ""ToAccountId"" = {accountId}")
+                        .ToListAsync();
+        }
+        public async Task<ICollection<SearchTransactionDto>> GetTransactionsByDateRange(DateTime startDate, DateTime endDate)
+        {
+            return await Set<SearchTransactionDto>()
+                        .FromSqlInterpolated($@"SELECT ""TransactionId"", ""FromAccountId"", ""ToAccountId"", ""Amount"", ""TransactionDate""
+                                                FROM public.""Transactions"" 
+                                                WHERE ""TransactionDate"" BETWEEN {startDate} AND {endDate}")
+                        .ToListAsync();
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -74,6 +99,7 @@ namespace BankApp.Contexts
                                               .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<SearchAccountDto>().HasNoKey().ToView(null);
+            modelBuilder.Entity<SearchTransactionDto>().HasNoKey().ToView(null);
         }
     }
 }

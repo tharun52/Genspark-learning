@@ -15,6 +15,57 @@ namespace BankApp.Controller
         {
             _transactionService = transactionService;
         }
+        [HttpGet("sent/{accountId}")]
+        public async Task<ActionResult<ICollection<SearchTransactionDto>>> GetSentTransactions(int accountId)
+        {
+            try
+            {
+                var transactions = await _transactionService.SearchSentTransactionsByAccountId(accountId);
+                if (transactions != null && transactions.Count > 0)
+                {
+                    return Ok(transactions);
+                }
+                return NotFound("No sent transactions found for the specified account ID.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("received/{accountId}")]
+        public async Task<ActionResult<ICollection<SearchTransactionDto>>> GetReceivedTransactions(int accountId)
+        {
+            try
+            {
+                var transactions = await _transactionService.SearchReceivedTransactionsByAccountId(accountId);
+                if (transactions != null && transactions.Count > 0)
+                {
+                    return Ok(transactions);
+                }
+                return NotFound("No received transactions found for the specified account ID.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("date-range")]
+        public async Task<ActionResult<ICollection<SearchTransactionDto>>> GetTransactionsByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            try
+            {
+                var transactions = await _transactionService.SearchTransactionsByDateRange(startDate, endDate);
+                if (transactions != null && transactions.Count > 0)
+                {
+                    return Ok(transactions);
+                }
+                return NotFound("No transactions found for the specified date range.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpPost]
         public async Task<ActionResult<Models.Transaction>> CreateTransaction([FromBody] CreateTransactionRequestDto createTransactionRequestDto)
