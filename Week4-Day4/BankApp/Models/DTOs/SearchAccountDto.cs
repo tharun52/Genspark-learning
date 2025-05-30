@@ -7,5 +7,6 @@ namespace BankApp.Models.DTOs
         public string Email { get; set; } = string.Empty;
         public decimal Balance { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        asd
     }
 }
