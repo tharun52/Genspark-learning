@@ -94,5 +94,39 @@ namespace BankApp.Controller
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("withdraw/{accountId}")]
+        public async Task<ActionResult<Account>> Withdraw(int accountId, [FromBody] decimal amount)
+        {
+            try
+            {
+                var account = await _accountService.Withdraw(accountId, amount);
+                if (account != null)
+                {
+                    return Ok(account);
+                }
+                return NotFound($"Account with ID {accountId} not found or insufficient funds.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("deposit/{accountId}")]
+        public async Task<ActionResult<Account>> Deposit(int accountId, [FromBody] decimal amount)
+        {
+            try
+            {
+                var account = await _accountService.Deposit(accountId, amount);
+                if (account != null)
+                {
+                    return Ok(account);
+                }
+                return NotFound($"Account with ID {accountId} not found.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

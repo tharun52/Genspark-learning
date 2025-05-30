@@ -39,7 +39,59 @@ namespace BankApp.Services
                 throw;
             }
         }
+        public async Task<Account> Withdraw(int accountId, decimal amount)
+        {
+            using var transaction = await _bankContext.Database.BeginTransactionAsync();
+            var account = await _bankContext.Accounts.FindAsync(accountId);
 
+            if (account == null)
+            {
+                throw new Exception($"Account with ID {accountId} not found.");
+            }
+
+            if (account.Balance < amount)
+            {
+                throw new Exception("Insufficient funds for withdrawal.");
+            }
+
+            try
+            {
+                account.Balance -= amount;
+                _bankContext.Accounts.Update(account);
+                await _bankContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return account;
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+        public async Task<Account> Deposit(int accountId, decimal amount)
+        {
+            using var transaction = await _bankContext.Database.BeginTransactionAsync();
+            var account = await _bankContext.Accounts.FindAsync(accountId);
+
+            if (account == null)
+            {
+                throw new Exception($"Account with ID {accountId} not found.");
+            }
+
+            try
+            {
+                account.Balance += amount;
+                _bankContext.Accounts.Update(account);
+                await _bankContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return account;
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
         public Task<SearchAccountDto?> GetAccountById(int accountId)
         {
             try

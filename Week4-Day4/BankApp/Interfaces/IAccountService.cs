@@ -11,5 +11,7 @@ namespace BankApp.Interfaces
         public Task<ICollection<SearchAccountDto>> GetAccountByName(string accountHolderName);
         public Task<ICollection<SearchAccountDto>> GetAccountByEmail(string email);
         public Task<ICollection<SearchAccountDto>> GetAllAccounts();
+        public Task<Account> Withdraw(int accountId, decimal amount);
+        public Task<Account> Deposit(int accountId, decimal amount);
     }
 }
