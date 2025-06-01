@@ -1,24 +1,18 @@
-using FirstApi.Repositories;
-using FirstApi.Services;
-using FirstApi.Interfaces;
-using FirstApi.Models;
+using FirstApi.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-// builder.Services.AddScoped<IRepository<int, Doctor>, DoctorRepository>();
-// builder.Services.AddScoped<IDoctorService, DoctorService>();
-builder.Services.AddSingleton<IRepository<int, Doctor>, DoctorRepository>();
-builder.Services.AddSingleton<IDoctorService, DoctorService>();
 
-
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-
+builder.Services.AddDbContext<ClinicContext>(opts =>
+{
+    opts.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 var app = builder.Build();
 
@@ -27,8 +21,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.MapOpenApi();
 }
 
+
 app.MapControllers();
+
 app.Run();

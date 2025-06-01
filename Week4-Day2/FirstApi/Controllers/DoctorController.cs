@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using FirstApi.Repositories;
 using FirstApi.Services;
-using FirstApi.Models;
-using FirstApi.Repositories;
 using FirstApi.Interfaces;
-
+using FirstApi.Models;
 
 
 [ApiController]
