@@ -27,7 +27,7 @@ namespace BankApp.Services
             var relevantFaqs = faqs
                 .Where(f => userInput.Contains(f.Question, StringComparison.OrdinalIgnoreCase) ||
                             f.Question.Split(' ').Any(word => userInput.Contains(word, StringComparison.OrdinalIgnoreCase)))
-                .Take(5) // Limit to 5 FAQs
+                .Take(20) 
                 .ToList();
 
             var systemPrompt = "You are a helpful banking assistant at KKT Bank in Chennai. Reply formally and clearly using the FAQ below when relevant.";
