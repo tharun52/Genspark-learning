@@ -46,14 +46,12 @@ namespace FirstApi.Controllers
         [HttpDelete("{appointmentNumber}")]
         public async Task<ActionResult<Appointment>> SoftDeleteAppointment(string appointmentNumber)
         {
-            // Step 1: Retrieve the appointment
             var appointment = await _appointmentService.GetAppointmentByNumber(appointmentNumber);
             if (appointment == null)
             {
                 return NotFound("Appointment not found");
             }
 
-            // Step 2: Perform resource-based authorization
             var authResult = await _authorizationService.AuthorizeAsync(User, appointment, "DoctorCanDeleteAppointment");
 
             if (!authResult.Succeeded)
@@ -61,7 +59,6 @@ namespace FirstApi.Controllers
                 return Forbid();
             }
 
-            // Step 3: Authorized => perform soft delete
             await _appointmentService.SoftDeleteAppointment(appointmentNumber);
 
             return NoContent();
