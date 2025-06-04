@@ -19,7 +19,6 @@ public class DoctorController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Doctor")]
     public async Task<ActionResult<IEnumerable<Doctor>>> GetAllDoctors()
     {
         var doctors = await doctorService.GetAllDoctors();
@@ -31,7 +30,6 @@ public class DoctorController : ControllerBase
     }
 
     [HttpGet("{doctorName}")]
-    [Authorize(Roles = "Doctor")]
     public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctorByName(string doctorName)
     {
         var doctors = await doctorService.GetDoctByName(doctorName);
@@ -41,6 +39,7 @@ public class DoctorController : ControllerBase
         }
         return Ok(doctors);
     }
+
     [HttpPost]
     public async Task<ActionResult<Doctor>> PostDoctor([FromBody] DoctorAddRequestDto doctor)
     {
