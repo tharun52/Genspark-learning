@@ -13,7 +13,7 @@ namespace FirstApi.Services
 
         public AuthenticationService(ITokenService tokenService,
                                     IEncryptionService encryptionService,
-                                    IRepository<string, User> userRepository,
+                                    IRepository<string, User>  userRepository,
                                     ILogger<AuthenticationService> logger)
         {
             _tokenService = tokenService;
@@ -48,6 +48,13 @@ namespace FirstApi.Services
                 Username = user.Username,
                 Token = token,
             };
+        }
+        public async Task<string> LoginWithOAuthAsync(string email)
+        {
+            var user = await _userRepository.Get(email);
+            if (user == null) throw new UnauthorizedAccessException();
+
+            return await _tokenService.GenerateToken(user); // Optional: create internal JWT
         }
     }
 }

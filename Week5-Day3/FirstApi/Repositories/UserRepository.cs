@@ -1,4 +1,5 @@
 using FirstApi.Contexts;
+using FirstApi.Interfaces;
 using FirstApi.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,5 +21,19 @@ namespace FirstApi.Repositories
             return await _clinicContext.Users.ToListAsync();
         }
             
+
+        // public async Task<User?> GetUserByEmailAsync(string email)
+        // {
+        //     return await _context.Users
+        //         .Include(u => u.Doctor)
+        //         .Include(u => u.Patient)
+        //         .FirstOrDefaultAsync(u => u.Username == email);
+        // }
+
+        // public async Task AddUserAsync(User user)
+        // {
+        //     _context.Users.Add(user);
+        //     await _context.SaveChangesAsync();
+        // }
     }
 }

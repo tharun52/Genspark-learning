@@ -12,6 +12,9 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using FirstApi.Policies;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,7 +64,7 @@ builder.Services.AddTransient<IRepository<int, Patient>, PatientRepository>();
 builder.Services.AddTransient<IRepository<int, Speciality>, SpecialityRepository>();
 builder.Services.AddTransient<IRepository<string, Appointment>, AppointmentRepository>();
 builder.Services.AddTransient<IRepository<int, DoctorSpeciality>, DoctorSpecialityRepository>();
-builder.Services.AddTransient<IRepository<string, User>, UserRepository>();
+builder.Services.AddTransient<IRepository<string, User> , UserRepository>();
 #endregion
 
 #region Services
@@ -75,21 +78,36 @@ builder.Services.AddTransient<IAppointmentService, AppointmentService>();
 #endregion
 
 
-#region AuthenticationFilter
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateAudience = false,
-                        ValidateIssuer = false,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Keys:JwtTokenKey"]))
-                    };
-                });
-#endregion
-JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+// #region AuthenticationFilter
+// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//                 .AddJwtBearer(options =>
+//                 {
+//                     options.TokenValidationParameters = new TokenValidationParameters
+//                     {
+//                         ValidateAudience = false,
+//                         ValidateIssuer = false,
+//                         ValidateLifetime = true,
+//                         ValidateIssuerSigningKey = true,
+//                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Keys:JwtTokenKey"]))
+//                     };
+//                 });
+// #endregion
+// JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+.AddCookie()
+.AddGoogle(options =>
+{
+    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+    options.CallbackPath = "/signin-google";
+    options.SaveTokens = true;
+});
+
 
 
 #region Authorization

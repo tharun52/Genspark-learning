@@ -114,7 +114,7 @@ namespace FirstApi.Services
             }
             catch (Exception e)
             {
-
+                throw new Exception("Could not get existing specialities: " + e.Message);
             }
             int count = 0;
             foreach (var item in doctor.Specialities)
