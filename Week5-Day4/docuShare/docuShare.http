@@ -1,0 +1,6 @@
+@docuShare_HostAddress = http://localhost:5200
+
+GET {{docuShare_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

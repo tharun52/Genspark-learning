@@ -156,7 +156,6 @@ namespace FirstApi.Test
             );
             Assert.ThrowsAsync<Exception>(async () => await service.AddDoctor(doctorDto));
         }
-        
         [TearDown]
         public void TearDown()
         {
