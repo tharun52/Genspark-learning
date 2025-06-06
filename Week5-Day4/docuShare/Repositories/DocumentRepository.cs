@@ -13,7 +13,12 @@ namespace docuShare.Repositories
         }
         public override async Task<Document> Get(int key)
         {
-            return await _documentContext.Documents.SingleOrDefaultAsync(d => d.Id == key);
+            var document = await _documentContext.Documents.SingleOrDefaultAsync(d => d.Id == key);
+            if (document == null)
+            {
+                throw new InvalidOperationException($"Document with Id {key} not found.");
+            }
+            return document;
         }
 
         public override async Task<IEnumerable<Document>> GetAll()

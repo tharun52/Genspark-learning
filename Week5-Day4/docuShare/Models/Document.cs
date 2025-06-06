@@ -12,5 +12,6 @@ namespace docuShare.Models
         public string Status { get; set; } = string.Empty;
         public byte[]? Content { get; set; }
         public int AccessLevel { get; set; } = 0;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
