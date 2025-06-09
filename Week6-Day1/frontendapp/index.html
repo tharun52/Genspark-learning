@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctor's Clinic</title>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- HEADER START -->
+    <header class="header">
+        <div class="logo">
+            <img src="images/logo.png" alt="Clinic Logo" />
+            <span>Doctor's Clinic</span>
+        </div>
+
+        <button class="menu-toggle" id="menu-toggle">
+            <i data-lucide="menu"></i>
+        </button>
+
+        <nav class="nav-links" id="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Services</a>
+            <button class="btn login">Log In</button>
+            <button class="btn register">Register</button>
+        </nav>
+    </header>
+
+    <!-- HEADER END -->
+
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Quality Care<br>for Your Health</h1>
+            <p>Our clinic provides the best medical services for you and your family.</p>
+            <button class="btn cta">Book Appointment</button>
+        </div>
+        <div class="hero-image">
+            <img src="images/hero.png" alt="Doctor Image" />
+        </div>
+    </section>
+
+    <section class="services container">
+        <h1>Our Services</h1>
+        <div class="service-cards">
+            <div class="card">
+                <i data-lucide="notepad-text" class="icon"></i>
+                <h2>Consultation</h2>
+                <p>Get professional advice from experienced doctors.</p>
+            </div>
+            <div class="card">
+                <i data-lucide="stethoscope" class="icon"></i>
+                <h2>Health Checkups</h2>
+                <p>Regular checkups to keep you in optimal health.</p>
+            </div>
+            <div class="card">
+                <i data-lucide="circle-plus" class="icon"></i>
+                <h2>Emergency Care</h2>
+                <p>Quick and reliable medical help when you need it most.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonial container">
+        <h1>What Our Patients Are Saying</h1>
+        <div class="testimonial-card">
+            <i data-lucide="quote" class="testimonial-icon"></i>
+            <div class="testimonial-text">
+                <p>Excellent service and wonderful staff.</p>
+                <p>I Always feel well taken care of.</p>
+                <p class="author">John D.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="timings">
+        <div class="timing container">
+            <div class="timings-card">
+                <h1>Clinic Hours</h1>
+                <table class="timings-table">
+                    <tr>
+                        <td>Monday-Friday</td>
+                        <td>8:00 AM - 6:00 PM</td>
+                    </tr>
+                    <tr>
+                        <td>Saturday</td>
+                        <td>9:00 AM - 1:00PM</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="timings-card">
+                <h1>Clinic Hours</h1>
+                <table class="timings-table">
+                    <tr>
+                        <td>Monday-Friday</td>
+                        <td>8:00 AM - 5:00 PM</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>9:00 AM - 1:00PM</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        lucide.createIcons();
+
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+    </script>
+
+</body>
+
+</html>
