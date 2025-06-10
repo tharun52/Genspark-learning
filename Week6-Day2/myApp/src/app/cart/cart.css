@@ -1,0 +1,44 @@
+nav {
+    background-color: lightgray;
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 20px;
+    font-size: larger;
+}
+
+img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+i.bi {
+    font-size: 1.8rem;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+}
+
+i.bi:hover {
+    color: #007bff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  background: #fff;
+  text-align: center;
+}
+
+th, td {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  text-align: center;
+}
+
+th {
+  font-size: large;
+  font-weight: 600;
+}
