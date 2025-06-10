@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notify - Document Sharing Demo</title>
+</head>
+<body>
+    <h2>Notify: Document Sharing</h2>
+    <button onclick="logout()">Logout</button>
+    <hr>
+    <h3>Upload Document (HR/Admin only)</h3>
+    <form id="uploadForm">
+        <input type="file" id="fileInput" required />
+        <input type="number" id="accessLevel" placeholder="Access Level" min="1" required />
+        <button type="submit">Upload</button>
+    </form>
+    <hr>
+    <h3>Real-time Notifications</h3>
+    <div id="msgs"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@8.0.7/dist/browser/signalr.min.js"></script>
+    <script>
+        const backendUrl = "http://localhost:5200";
+        const hubUrl = backendUrl + "/notificationhub";
+
+        // Get JWT from localStorage
+        function getJwt() {
+            return localStorage.getItem("notify_jwt") || "";
+        }
+
+        // Redirect to login if not logged in
+        if (!getJwt()) {
+            window.location.href = "login.html";
+        }
+
+        // SignalR connection with JWT authentication
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl(hubUrl, {
+                accessTokenFactory: getJwt,
+                withCredentials: true
+            })
+            .withAutomaticReconnect()
+            .build();
+
+        // Listen for document notifications
+        connection.on("DocumentAdded", (filename) => {
+            const placeHolder = document.getElementById("msgs");
+            const content = document.createElement("p");
+            content.innerHTML = `<b>New document uploaded:</b> ${filename}`;
+            placeHolder.append(content);
+        });
+
+        // Start connection
+        connection.start()
+            .then(() => {
+                console.log("SignalR connected");
+            })
+            .catch(err => {
+                console.error("SignalR connection failed", err);
+            });
+
+        // Upload file
+        document.getElementById("uploadForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const fileInput = document.getElementById("fileInput");
+            const accessLevel = document.getElementById("accessLevel").value;
+            const file = fileInput.files[0];
+            if (!file) return alert("Select a file!");
+
+            const formData = new FormData();
+            formData.append("File", file);
+            formData.append("AccessLevel", accessLevel);
+
+            const jwt = getJwt();
+            if (!jwt) return alert("Not logged in!");
+
+            try {
+                const response = await fetch(backendUrl + "/api/document", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + jwt
+                    },
+                    body: formData
+                });
+                const result = await response.text();
+                alert(result);
+            } catch (err) {
+                alert("Upload failed: " + err);
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem("notify_jwt");
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>
