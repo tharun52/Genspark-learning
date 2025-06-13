@@ -1,0 +1,14 @@
+<!-- @if(validDate){ -->
+<div class="weather-card">
+  <img [src]="'http://openweathermap.org/img/wn/' + icon + '@2x.png'" />
+  <p>Temperature: {{ temp }} °C</p>
+  <p>Description: {{ description }}</p>
+  <p>Humidity: {{ humidity }}%</p>
+  <p>Wind Speed: {{ windSpeed }} m/s</p>
+</div>
+<!-- }
+@else {
+  <div class="error">
+    <p>No valid weather data. Please enter a correct city name.</p>
+  </div>
+} -->

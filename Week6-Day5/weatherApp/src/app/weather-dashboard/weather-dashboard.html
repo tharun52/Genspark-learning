@@ -1,0 +1,9 @@
+<p>weather-dashboard works!</p>
+<app-city-search></app-city-search>
+
+@if(weatherData$){
+    <app-weather-card [weather]="weatherData$ | async"></app-weather-card>
+}
+@else{
+    <p>Error</p>
+}
