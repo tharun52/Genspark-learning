@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "Wireless Headphones",
+    "description": "Noise-cancelling over-ear Bluetooth headphones with 40-hour battery life.",
+    "price": 99.99,
+    "imageurl": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRi3jITRbStXlG5xUJKHKjkqZc4q65PuNutaDH5MWhMF9yUmNAfLgxqrrsweUQ8uqcKQaCDKvKu5gQjPK8NMtKs4I1s1qGF0NRmnejm7CoIe9fBeOdS5bVG"
+  },
+  {
+    "id": 2,
+    "name": "Smart Watch",
+    "description": "Fitness tracker with heart rate monitor, GPS, and waterproof design.",
+    "price": 149.99,
+    "imageurl": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQZN_mb6aeYNeW902wJ0diyrEKhhO6aO2CakhgFSUcAdihrLOQ5o4bdkcK4zshk013xRtWiIrPeAsQ_qjg2ZDQ9ANTjPdgUHdnJ5aBqD7wId5jMuSqsl3HqLrA"
+  },
+  {
+    "id": 3,
+    "name": "Portable Speaker",
+    "description": "Compact Bluetooth speaker with deep bass and 10-hour battery life.",
+    "price": 45.00,
+    "imageurl": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcShLMwOFwOVVjpQhmsPpmaJmMSOiQ-NWsN7pYKiYoK0ZOpYKp-fD9mcTqGj1T7F16X1NFXUrgPGH1WS7FKqCVnRclSyAL9xPtWUOkeoHQ"
+  },
+  {
+    "id": 4,
+    "name": "Gaming Mouse",
+    "description": "Ergonomic RGB gaming mouse with adjustable DPI and programmable buttons.",
+    "price": 29.95,
+    "imageurl": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQlPM5nFd6BVS3uxegLKvnS4CR_Y1W-FfK7ZoH5h1O3BnTHG0cbePDKYsYRFQfvCxFQcfCx9wg3DYtvXieq19vInFqfYJXYbbRncRrMWVqS9VMGLy_2vjf-bw"
+  },
+  {
+    "id": 5,
+    "name": "4K Monitor",
+    "description": "27-inch UHD monitor with HDR support and ultra-slim design.",
+    "price": 299.99,
+    "imageurl": "https://storage.aoc.com/assets/20655/24G4X_F_Fixed-big.png"
+  }
+]
