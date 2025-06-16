@@ -6,7 +6,7 @@ import { Product } from "../product/product";
 import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-home',
-  imports: [Product,FormsModule],
+  imports: [Product, FormsModule],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -26,18 +26,20 @@ export class Home {
   handleSearchProducts() {
     this.searchSubject.next(this.searchString);
   }
- 
+
   ngOnInit(): void {
-    this.productService.getAllProducts().subscribe(
-      {
-        next:(data:any)=>{
-         this.products = data.products as ProductModel[];
-         this.loading = false
-        },
-        error:(err)=>{},
-        complete:()=>{}
+    this.productService.getProductSearchResult('', this.limit, this.skip).subscribe({
+      next: (data: any) => {
+        this.products = data.products as ProductModel[];
+        this.total = data.total;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error("Error loading products:", err);
+        this.loading = false;
       }
-    )
+    });
+
     this.searchSubject.pipe(
       debounceTime(400),
       distinctUntilChanged(),
@@ -65,22 +67,22 @@ export class Home {
 
   scrollToTop(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    if(window.scrollY==0){
+    if (window.scrollY == 0) {
       this.showBackToTop = false;
     }
   }
-  
+
   loadMore() {
-  this.loading = true;
-  this.skip += this.limit;
+    this.loading = true;
+    this.skip += this.limit;
 
-  this.productService.getProductSearchResult(this.searchString, this.limit, this.skip)
-    .subscribe({
-      next: (data: any) => {
-        this.products = [...this.products, ...data.products];
+    this.productService.getProductSearchResult(this.searchString, this.limit, this.skip)
+      .subscribe({
+        next: (data: any) => {
+          this.products = [...this.products, ...data.products];
 
-        this.loading = false;
-      }
-    });
+          this.loading = false;
+        }
+      });
   }
 }
