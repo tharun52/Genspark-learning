@@ -14,17 +14,30 @@ export class Home {
   products: ProductModel[] = [];
   searchString: string = "";
   searchSubject = new Subject<string>();
-  loading: boolean = false;
+  loading: boolean = true;
   limit = 10;
   skip = 0;
   total = 0;
-  constructor(private productService: ProductService) {
+  showBackToTop: boolean = false;
 
+  constructor(private productService: ProductService) {
   }
+
   handleSearchProducts() {
     this.searchSubject.next(this.searchString);
   }
+ 
   ngOnInit(): void {
+    this.productService.getAllProducts().subscribe(
+      {
+        next:(data:any)=>{
+         this.products = data.products as ProductModel[];
+         this.loading = false
+        },
+        error:(err)=>{},
+        complete:()=>{}
+      }
+    )
     this.searchSubject.pipe(
       debounceTime(400),
       distinctUntilChanged(),
@@ -44,18 +57,22 @@ export class Home {
 
     const scrollPosition = window.innerHeight + window.scrollY;
     const threshold = document.body.offsetHeight - 100;
+    this.showBackToTop = scrollPosition > 1000;
     if (scrollPosition >= threshold && this.products?.length < this.total) {
-      console.log("Scroll : "+scrollPosition);
-      console.log("threshold: "+threshold)
-      
       this.loadMore();
     }
   }
+
+  scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if(window.scrollY==0){
+      this.showBackToTop = false;
+    }
+  }
+  
   loadMore() {
   this.loading = true;
   this.skip += this.limit;
-
-  const currentScroll = window.scrollY;
 
   this.productService.getProductSearchResult(this.searchString, this.limit, this.skip)
     .subscribe({
@@ -63,16 +80,7 @@ export class Home {
         this.products = [...this.products, ...data.products];
 
         this.loading = false;
-
-        
-        setTimeout(() => {
-          window.scrollTo({
-            top: currentScroll + 100,
-            behavior: 'smooth'
-          });
-        }, 100); 
       }
     });
   }
 }
-
