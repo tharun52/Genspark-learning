@@ -1,0 +1,19 @@
+<h2>Customer Details</h2>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Like</th>
+        <th>Unlike</th>
+        <th>Like Count</th>
+    </tr>
+    <tr *ngFor="let customer of data.default">
+        <td>{{ customer.id }}</td>
+        <td>{{ customer.name }}</td>
+        <td>{{ customer.email }}</td>
+        <td><i [class]="getLikeClass(customer)" (click)="toggleLike(customer)"></i></td>
+        <td><i [class]="getUnLikeClass(customer)" (click)="toggleUnLike(customer)"></i></td>
+        <td>{{ customer.likeCount }}</td>
+    </tr>
+</table>

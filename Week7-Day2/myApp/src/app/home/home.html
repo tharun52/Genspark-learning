@@ -1,0 +1,23 @@
+<div class="form-outline mb-4 search-form" data-mdb-input-init>
+  <input type="search" [(ngModel)]="searchString" (input)="handleSearchProducts()" class="form-control"
+    placeholder="Search Products" aria-label="Search" />
+</div>
+
+@if (!loading) {
+<div class="product-grid fade-in">
+  @for (item of products; track item.id) {
+    <app-product [product]="item" [search]="searchString"></app-product>
+  }
+
+</div>
+}
+@else {
+<div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+  <div class="spinner-border text-success" role="status">
+    <span class="sr-only"></span>
+  </div>
+</div>
+}
+@if(showBackToTop){
+<button class="back-to-top" (click)="scrollToTop()">↑</button>
+}

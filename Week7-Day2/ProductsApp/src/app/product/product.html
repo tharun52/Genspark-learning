@@ -1,0 +1,7 @@
+<div class="card product-card" [routerLink]="['/product', product?.id]">
+  <img class="card-img-top" [src]="product?.thumbnail" alt="{{product?.title}}">
+  <div class="card-body">
+    <h5 class="card-title" [innerHTML]="(product?.title ?? '') | highlight:search"></h5>
+    <p class="card-text fw-bold text-primary">Price: {{ getInrPrice() | currency:'INR' }}</p>
+  </div>
+</div>

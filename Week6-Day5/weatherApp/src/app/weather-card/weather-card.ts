@@ -10,12 +10,13 @@ import { Component, Input } from '@angular/core';
 export class WeatherCard {
   @Input() weather: any;
 
-description: string = '';
-icon: string = '';
-temp: number = 0;
-humidity: number = 0;
-windSpeed: number = 0;
-
+description: string | null = null;
+icon: string | null = null;
+temp: number | null = null;
+humidity: number | null = null;
+windSpeed: number | null = null;
+validData : boolean = false;
+noData : boolean = true;
 ngOnChanges() {
   if (this.weather) {
     this.description = this.weather.weather?.[0]?.description ?? '';
