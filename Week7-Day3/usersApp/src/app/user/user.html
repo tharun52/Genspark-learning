@@ -1,0 +1,22 @@
+<div class="user-card list-group shadow-sm rounded p-3" style="width: 300px; transition: background-color 0.3s;">
+  <ul class="list-group border-0">
+    <li class="list-group-item d-flex align-items-center border-0 pb-2">
+      <img [src]="user?.image" alt="User image" class="rounded-circle me-3"
+        style="width: 60px; height: 60px; object-fit: cover;">
+      <div>
+        <h5 class="mb-1">{{ user?.firstName }} {{ user?.lastName }}</h5>
+        <small class="text-muted">username: {{ user?.username }}</small>
+      </div>
+    </li>
+    <li class="list-group-item border-0 py-1"><strong>Email:</strong> {{ user?.email }}</li>
+    <li class="list-group-item border-0 py-1"><strong>Gender:</strong> {{ user?.gender }}</li>
+    <li class="list-group-item border-0 py-1"><strong>Role:</strong> {{ user?.role }}</li>
+    <li class="list-group-item border-0 py-1"><strong>Age:</strong> {{ user?.age }}</li>
+    <li class="list-group-item border-0 py-1">
+      <strong>Address:</strong><br>
+      {{ user?.address?.address }}, {{ user?.address?.city }}, {{ user?.address?.state }} ({{ user?.address?.stateCode }})<br>
+      {{ user?.address?.postalCode }}, {{ user?.address?.country }}
+    </li>
+  </ul>
+</div>
+    

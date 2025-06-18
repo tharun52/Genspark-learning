@@ -1,0 +1,56 @@
+<div class="container mt-4">
+  <h3 class="mb-3">Add New User</h3>
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+    <div class="mb-3">
+      <label class="form-label">First Name</label>
+      <input type="text" formControlName="firstName" class="form-control" placeholder="Enter first name" #firstName>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Last Name</label>
+      <input type="text" formControlName="lname" class="form-control" placeholder="Enter last name" #lname>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Age</label>
+      <input type="number" formControlName="age" class="form-control" placeholder="Enter age" #age>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Image</label>
+      <input type="file" class="form-control" (change)="onImageSelected($event)">
+    </div>
+    <h5 class="mt-4">Address Details</h5>
+
+    <div class="mb-3">
+      <label class="form-label">Street Address</label>
+      <input type="text" formControlName="address" class="form-control" placeholder="Enter street address" #address>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">City</label>
+      <input type="text" formControlName="city" class="form-control" placeholder="Enter city" #city>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">State</label>
+      <input type="text" formControlName="state" class="form-control" placeholder="Enter state" #state>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">State Code</label>
+      <input type="text" formControlName="stateCode" class="form-control" placeholder="Enter state code" #stateCode>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Postal Code</label>
+      <input type="text" formControlName="postalCode" class="form-control" placeholder="Enter postal code" #postalCode>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Country</label>
+      <input type="text" formControlName="country" class="form-control" placeholder="Enter country" #country>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">Add User</button>
+  </form>
+</div>

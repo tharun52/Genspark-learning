@@ -1,0 +1,26 @@
+<form class="d-flex gap-3 justify-content-center my-4" (ngSubmit)="applyFilter()">
+  <select [(ngModel)]="filter.gender" name="gender" class="form-select w-auto">
+    <option value="">All Genders</option>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+  </select>
+
+  <input type="number" [(ngModel)]="filter.age" name="age" class="form-control w-auto" placeholder="Age">
+
+  <input type="text" [(ngModel)]="filter.role" name="role" class="form-control w-auto" placeholder="Role">
+
+  <button class="btn btn-primary" type="submit">Apply</button>
+</form>
+
+@if (users.length > 0) {
+  <div class="d-flex flex-wrap gap-3 justify-content-center">
+    @for (user of users; track $index) {
+      <app-user [user]="user"></app-user>
+    }
+  </div>
+}
+@else {
+  <div class="text-center mt-5">
+    <p class="text-muted fs-5">No users found</p>
+  </div>
+}
