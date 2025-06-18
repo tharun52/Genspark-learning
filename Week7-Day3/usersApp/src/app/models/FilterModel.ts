@@ -1,7 +1,7 @@
 export class FilterModel {
   constructor(
     public gender: string = '',
-    public age: number | null = null,
+    public ageRange: string = '',
     public role: string = ''
   ) {}
 }

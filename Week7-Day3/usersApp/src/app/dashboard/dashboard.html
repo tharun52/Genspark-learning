@@ -1,0 +1,40 @@
+<div class="container my-4">
+  <h2 class="text-center mb-4">User Dashboard</h2>
+
+  <!-- Filters -->
+  <form class="d-flex flex-wrap gap-3 justify-content-center mb-4">
+    <select [(ngModel)]="filter.gender" name="gender" class="form-select w-auto" (change)="onFilterChange()">
+      <option value="">All Genders</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+
+    <select [(ngModel)]="filter.ageRange" name="ageRange" class="form-select w-auto" (change)="onFilterChange()">
+      <option value="">All Ages</option>
+      <option value="0-18">0 - 18</option>
+      <option value="19-30">19 - 30</option>
+      <option value="31-45">31 - 45</option>
+      <option value="46-60">46 - 60</option>
+      <option value="61+">61+</option>
+    </select>
+
+    <select [(ngModel)]="filter.role" name="role" class="form-select w-auto" (change)="onFilterChange()">
+      <option value="">All Roles</option>
+      <option value="admin">Admin</option>
+      <option value="moderator">Moderator</option>
+      <option value="user">User</option>
+    </select>
+  </form>
+
+  <div class="row text-center">
+    <div class="col-md-4 mb-4">
+      <div echarts [options]="genderChartOptions" class="chart" style="height: 300px;"></div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div echarts [options]="roleChartOptions" class="chart" style="height: 300px;"></div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div echarts [options]="ageChartOptions" class="chart" style="height: 300px;"></div>
+    </div>
+  </div>
+</div>

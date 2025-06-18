@@ -60,7 +60,7 @@ export class AddUser {
         lastName: formValue.lname,
         gender: '', 
         image: formValue.image,
-        role: '', 
+        role: formValue.role, 
         address: {
           address: formValue.address,
           city: formValue.city,

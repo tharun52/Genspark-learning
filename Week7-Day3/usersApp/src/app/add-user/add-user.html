@@ -19,6 +19,14 @@
       <label class="form-label">Image</label>
       <input type="file" class="form-control" (change)="onImageSelected($event)">
     </div>
+    <div class="mb-3">
+      <label class="form-label">Role</label>
+      <select class="form-select" formControlName="role" #role>
+        <option value="admin">Admin</option>
+        <option value="moderator">Moderator</option>
+        <option value="user">User</option>
+      </select>
+    </div>
     <h5 class="mt-4">Address Details</h5>
 
     <div class="mb-3">
