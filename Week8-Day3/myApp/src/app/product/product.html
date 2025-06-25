@@ -1,0 +1,15 @@
+<div class="card" style="width: 18rem;">
+  <img
+  class="card-img-top"
+  [ngSrc]="product?.thumbnail!"
+  alt="Card image cap"
+  width="300"
+  height="300"priority/>
+
+
+  <div class="card-body">
+    <h5 class="card-title">{{product?.title}}</h5>
+    <p class="card-text">{{product?.description}}</p>
+    <button (click)="handleBuyClick(product?.id)" class="btn btn-primary">Buy for {{product?.price | currency:'INR'}}</button>
+  </div>
+</div>
