@@ -1,0 +1,11 @@
+@if (!recipes)
+{
+  <div class="alert alert-danger" role="alert">No recipes found</div>
+}
+@else {
+  <div class="d-flex flex-wrap gap-5 justify-content-center">
+    @for (recipeItem of recipes; track recipeItem.id) {
+      <app-recipe [recipe]="recipeItem"></app-recipe>
+    }
+  </div>
+}
