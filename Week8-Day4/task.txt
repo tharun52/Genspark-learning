@@ -1,0 +1,94 @@
+1. You have a file with permissions -rw-r--r--, and you run chmod +x file.sh. What happens?
+
+[root@localhost ~]# touch test.txt
+[root@localhost ~]# ls -l
+total 8
+-rw-r--r-- 1 root root 114 Dec 26  2020 bench.py
+-rw-r--r-- 1 root root 185 Sep  9  2018 hello.c
+-rw-r--r-- 1 root root   0 Jun 26 13:20 test.txt
+[root@localhost ~]# chmod +x test.txt
+[root@localhost ~]# ls -l
+total 8
+-rw-r--r-- 1 root root 114 Dec 26  2020 bench.py
+-rw-r--r-- 1 root root 185 Sep  9  2018 hello.c
+-rwxr-xr-x 1 root root   0 Jun 26 13:20 test.txt
+
+when I executed chmod +x, the execute permission is added
+
+
+What is the difference between chmod 744 file.txt and chmod u=rwx,go=r file.txt?
+
+[root@localhost ~]# touch file2.txt
+[root@localhost ~]# chmod u=rwx,go=r file2.txt
+[root@localhost ~]# ls -l
+-rwxr--r-- 1 root root @ Jun 26 13:25 filel.txt
+-rwxr--r-- 1 root root @ Jun 26 13:26 file2.txt
+
+both 744 and u=rwx,go=r means rwxr--r--
+give all access to owner and read only to group and other
+
+
+3. What is the sticky bit, and when should you use it?
+
+Lroot@tocatnost ~J# Ls —=ir
+
+total @
+
+[root@localhost ~]# ls -1r
+-rw-r——r-- 1 root root @ Jun 26 14:38 file.txt
+[root@localhost ~]# chmod +t file.txt
+[root@localhost ~]# ls -1r
+-rw-r——r-T 1 root root @ Jun 26 14:38 file.txt
+[root@locatlhost ~]# JI
+
+sticky bit is a way to set full permission on a file by the user
+once the stickybit is set by the user, only he can delete or rename the file even when others have those permission
+
+4. You are told to give the owner full access, group only execute, and others no permissions. What symbolic command achieves this?
+
+[root@localhost ~]# chmod u=rwx,g=x,o= file.txt
+[root@localhost ~]# ls -lr
+-rwx--x--- 1 root root @ Jun 26 14:38 file.txt
+
+5. What is umask, and why is it important?
+
+[root@localhost ~]# umask
+0022
+[root@localhost ~]# touch file1.txt
+[root@localhost ~]# ls -lr
+total 0
+-rw-r--r-- 1 root root 0 Jun 26 14:51 file1.txt
+[root@localhost ~]# umask 710
+[root@localhost ~]# touch file2.txt
+[root@localhost ~]# ls -lr
+total 0
+----rw-rw- 1 root root 0 Jun 26 14:52 file2.txt
+-rw-r--r-- 1 root root 0 Jun 26 14:51 file1.txt
+
+
+umask is used to set the current file permissions used when creating a new file 
+we can set umask using the permission number
+
+6. If the umask is 022, what are the default permissions for a new file and a new directory?
+
+[root@localhost ~]# touch file.txt
+[root@localhost ~]# mkdir folder
+[root@localhost ~]# ls -lr
+total 4
+drwxr-xr-x 2 root root 37 Jun 26 14:54 folder
+-rw-r--r-- 1 root root  0 Jun 26 14:54 file.txt
+
+the default permission 
+    for file is -rw-r--r-- (Read and Write for user, Read for group and others)
+    for folder is drwxr-xr-x (Read, Write and Execute for user, Read and Execute for group and others)
+
+
+7. Why is umask often set to 022 in development environments but 027 or 077 in production?
+
+022 allows write access so it is good for team development of the project
+but in 027, the owner and group have the access and in 077, only the owner have the access
+
+8. useradd vs adduser
+
+Useradd is used to create a user with more configurations.
+Adduser is a script that builds the useradd command line and executes it. 
