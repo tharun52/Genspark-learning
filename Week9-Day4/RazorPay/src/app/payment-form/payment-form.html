@@ -1,0 +1,39 @@
+<div class="container mt-5">
+    
+    <h2 class="mb-4">UPI Payment Form</h2>
+    @if (product) {
+
+        <div class="alert alert-info">
+            <strong>Selected Product:</strong> {{ product.title }}<br />
+            <strong>Amount:</strong> ₹ {{ convertToINR(product.price) }}
+        </div>
+    }
+    <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" novalidate>
+        
+        <div class="mb-3">
+            <label for="name" class="form-label">Customer Name</label>
+            <input type="text" class="form-control" id="name" formControlName="name" placeholder="Enter full name" />
+            @if(name?.touched && name?.errors) {
+                <div class="form-error text-danger mt-1">Name is required</div>
+            }
+        </div>
+        
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" formControlName="email" placeholder="Enter email" />
+            @if(email?.touched && email?.errors) {
+                <div class="form-error text-danger mt-1">Valid email is required</div>
+            }
+        </div>
+        
+        <div class="mb-3">
+            <label for="contact" class="form-label">Contact Number</label>
+            <input type="text" class="form-control" id="contactno" formControlName="contactno"
+            placeholder="Enter 10-digit contact number" />
+            @if(contactno?.touched && contactno?.errors) {
+                <div class="form-error text-danger mt-1">Invalid Contact no</div>
+            }
+        </div>      
+        <button type="submit" class="btn btn-primary">Pay Now</button>
+    </form>
+</div>
