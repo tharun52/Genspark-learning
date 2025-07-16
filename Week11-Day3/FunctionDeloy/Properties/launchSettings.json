@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Week11_Day3": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7201",
+      "launchBrowser": false
+    }
+  }
+}
