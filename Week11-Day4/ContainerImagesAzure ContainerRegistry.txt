@@ -1,0 +1,39 @@
+ACR_NAME=tharunacr     
+
+az acr create --resource-group tharun-rg --name $ACR_NAME --sku premium
+
+code Dockerfile
+
+az acr build --registry $ACR_NAME --image helloacrtasks:v1 
+
+
+az acr repository list --name $ACR_NAME --output table
+    Result
+    -------------
+    helloacrtasks
+
+az acr update -n $ACR_NAME --admin-enabled true
+
+az acr credential show --name $ACR_NAME
+    {
+    "passwords": [
+        {
+        "name": "password",
+        "value": "JNhRZWQgTHipqz1Nt+WacD3Pw5KEef/mW2jhhwOn0C+ACRDz06bJ"
+        },
+        {
+        "name": "password2",
+        "value": "5rfVCCoHPj9BG8oGJRH5Wu1XRvHKjwnYvgxe1khrkY+ACRBheiOS"
+        }
+    ],
+    "username": "tharunacr"
+    }
+
+az container create --resource-group tharun-rg --name acr-tasks --image $ACR_NAME.azurecr.io/helloacrtasks:v1 --registry-login-server $ACR_NAME.azurecr.io --ip-address Public --location eastus --registry-username tharunacr --registry-password JNhRZWQgTHipqz1Nt+WacD3Pw5KEef/mW2jhhwOn0C+ACRDz06bJ --os-type Linux --cpu 1 --memory 1
+
+az container show --resource-group tharun-rg --name acr-tasks --query ipAddress.ip --output table
+    Result
+    -------------
+    20.232.74.153
+
+
