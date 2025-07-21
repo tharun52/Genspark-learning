@@ -1,0 +1,47 @@
+<div class="container mt-5">
+  <h2 class="mb-4">Upload Training Video</h2>
+
+  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data" novalidate>
+    <div class="mb-3">
+      <label class="form-label">Title</label>
+      <input type="text" formControlName="title" class="form-control" [class.is-invalid]="uploadForm.get('title')?.invalid && uploadForm.get('title')?.touched" />
+      @if (uploadForm.get('title')?.invalid && uploadForm.get('title')?.touched) {
+        <div class="invalid-feedback">Title is required.</div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Description</label>
+      <textarea formControlName="description" class="form-control" [class.is-invalid]="uploadForm.get('description')?.invalid && uploadForm.get('description')?.touched"></textarea>
+      @if (uploadForm.get('description')?.invalid && uploadForm.get('description')?.touched) {
+        <div class="invalid-feedback">Description is required.</div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">MP4 File</label>
+      <input type="file" (change)="onFileChange($event)" class="form-control" accept=".mp4" />
+      @if (uploadForm.get('file')?.invalid && uploadForm.get('file')?.touched) {
+        <div class="invalid-feedback d-block">MP4 file is required.</div>
+      }
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="loading">Upload</button>
+  </form>
+
+  @if (loading) {
+    <div class="mt-3 text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Uploading...</span>
+      </div>
+    </div>
+  }
+
+  @if (uploadSuccess) {
+    <div class="alert alert-success mt-3">Video uploaded successfully!</div>
+  }
+
+  @if (uploadError) {
+    <div class="alert alert-danger mt-3">{{ uploadError }}</div>
+  }
+</div>

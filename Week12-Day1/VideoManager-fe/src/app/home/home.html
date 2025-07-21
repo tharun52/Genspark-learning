@@ -1,0 +1,56 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Training Videos</h2>
+    <button class="btn btn-primary" [routerLink]="['/upload']">
+      Upload Video
+    </button>
+  </div>
+
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Upload Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (video of videos; track $index) {
+        <tr>
+          <td (click)="openModal(video.blobUrl)" style="cursor: pointer;">
+            {{ video.title }}
+          </td>
+          <td (click)="openModal(video.blobUrl)" style="cursor: pointer;">
+            {{ video.description }}
+          </td>
+          <td (click)="openModal(video.blobUrl)" style="cursor: pointer;">
+            {{ video.uploadDate | date }}
+          </td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="deleteVideo(video.id)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+</div>
+
+@if (selectedVideoUrl) {
+  <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Training Video</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <video [src]="selectedVideoUrl" controls width="100%" height="400"></video>
+        </div>
+      </div>
+    </div>
+  </div>
+}

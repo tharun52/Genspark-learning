@@ -15,3 +15,4 @@ COPY --from=build /App/out .
 
 EXPOSE 80
 ENTRYPOINT ["dotnet", "MyApiApp.dll"]
+
