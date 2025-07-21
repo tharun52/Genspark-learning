@@ -1,8 +1,7 @@
 using VideoManager.Interfaces;
 using VideoManager.Models;
-using Microsoft.Extensions.Configuration;
 using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Specialized;
+
 
 namespace VideoManager.Services
 {
