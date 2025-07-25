@@ -14,11 +14,19 @@ export class HomeComponent implements OnInit {
   videos: TrainingVideo[] = [];
   selectedVideoUrl: string | null = null;
 
+  loading: boolean = true;
+
+
   constructor(private videoService: VideoService) {}
 
   ngOnInit(): void {
+    this.loading = true;
     this.videoService.getVideos().subscribe(data => {
       this.videos = data;
+      this.loading = false;
+    }, error => {
+      this.loading = false;
+      console.error('Error loading videos', error);
     });
   }
 

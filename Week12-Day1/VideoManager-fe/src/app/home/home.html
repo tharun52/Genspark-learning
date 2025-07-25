@@ -5,37 +5,46 @@
       Upload Video
     </button>
   </div>
+  @if (loading) {
+    <div class="text-center my-5">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  }
+  @else {
 
-  <table class="table table-bordered table-hover">
-    <thead class="table-dark">
-      <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Upload Date</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (video of videos; track $index) {
+    <table class="table table-bordered table-hover">
+      <thead class="table-dark">
         <tr>
-          <td (click)="openModal(video.blobUrl)" style="cursor: pointer;">
-            {{ video.title }}
-          </td>
-          <td (click)="openModal(video.blobUrl)" style="cursor: pointer;">
-            {{ video.description }}
-          </td>
-          <td (click)="openModal(video.blobUrl)" style="cursor: pointer;">
-            {{ video.uploadDate | date }}
-          </td>
-          <td>
-            <button class="btn btn-danger btn-sm" (click)="deleteVideo(video.id)">
-              Delete
-            </button>
-          </td>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Upload Date</th>
+          <th>Actions</th>
         </tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        @for (video of videos; track $index) {
+          <tr>
+            <td (click)="openModal(video.blobUrl)" style="cursor: pointer;">
+              {{ video.title }}
+            </td>
+            <td (click)="openModal(video.blobUrl)" style="cursor: pointer;">
+              {{ video.description }}
+            </td>
+            <td (click)="openModal(video.blobUrl)" style="cursor: pointer;">
+              {{ video.uploadDate | date }}
+            </td>
+            <td>
+              <button class="btn btn-danger btn-sm" (click)="deleteVideo(video.id)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
 
 </div>
 
